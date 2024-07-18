@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+enum RecipeError : Error {
+    case invalidURL, invalidResponse, invalidData
+}

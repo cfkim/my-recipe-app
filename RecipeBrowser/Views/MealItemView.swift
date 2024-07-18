@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct MealItemView: View {
+    let id : String
+    let thumbnail : String
+    let isFavorite : String
+    
+    @StateObject var viewModel = MealItemViewViewModel()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
     }
 }
 
 #Preview {
-    MealItemView()
+    MealItemView(id: "52897", thumbnail: "52897", isFavorite: "False")
 }
