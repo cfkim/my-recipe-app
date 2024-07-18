@@ -40,7 +40,7 @@ struct ListView: View {
                     VStack{
                         if let meals = viewModel.listOfMeals?.meals{
                             ForEach(meals, id: \.self) { meal in
-                                Text(meal.strMeal)
+                                MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
                             }
                         }
                         
