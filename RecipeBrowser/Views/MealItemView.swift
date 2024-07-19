@@ -11,6 +11,7 @@ struct MealItemView: View {
     let id : String
     let name: String
     let thumbnail : String
+    
     @StateObject var viewModel = MealItemViewViewModel()
 
     var body: some View {
