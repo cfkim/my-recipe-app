@@ -12,7 +12,7 @@ struct MainView: View {
         TabView{
             ListView()
                 .tabItem {
-                    Label("Explore", systemImage: "fork.knife")
+                    Label("Discover", systemImage: "safari.fill")
                 }
             SearchView()
                 .tabItem {

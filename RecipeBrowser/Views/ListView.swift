@@ -10,6 +10,7 @@ import SwiftUI
 struct ListView: View {
     @State var selection : Category = .Dessert
     @StateObject var viewModel = ListViewViewModel()
+    @StateObject var favoritesViewModel = FavoritesViewViewModel()
 
     var body: some View {
 
@@ -40,8 +41,12 @@ struct ListView: View {
                     VStack{
                         if let meals = viewModel.listOfMeals?.meals{
                             ForEach(meals, id: \.self) { meal in
-                                MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
+                                MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb, viewModel: favoritesViewModel)
                             }
+                        }else{
+                            Text("loading...")
+                                .offset(y: 250)
+                                .foregroundColor(.blue)
                         }
                         
                     }

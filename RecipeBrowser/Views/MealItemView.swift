@@ -12,7 +12,7 @@ struct MealItemView: View {
     let name: String
     let thumbnail : String
     
-    @StateObject var viewModel = MealItemViewViewModel()
+    @ObservedObject var viewModel: FavoritesViewViewModel
     
     var body: some View {
         VStack(alignment: .leading){
@@ -38,7 +38,7 @@ struct MealItemView: View {
                     .offset(x: 10, y: -10)
                     .onTapGesture {
                         viewModel.toggleFavorite(id: id, name: name, thumb: thumbnail)
-                        print(viewModel.favorites)
+                        print("\(viewModel.favorites.map { $0.strMeal })")
                     }
             }
             
@@ -66,14 +66,16 @@ struct Heart: View {
             .overlay {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
                     .foregroundColor(.pink)
+                    
                 
             }
             .foregroundColor(.white)
             .frame(width: 60, height: 60)
+            
     }
 }
 
 #Preview {
-    MealItemView(id: "52897", name: "Carrot Cake", thumbnail: "https://www.themealdb.com/images/media/meals/vrspxv1511722107.jpg")
+    MealItemView(id: "52897", name: "Carrot Cake", thumbnail: "https://www.themealdb.com/images/media/meals/vrspxv1511722107.jpg", viewModel: FavoritesViewViewModel())
 }
 
