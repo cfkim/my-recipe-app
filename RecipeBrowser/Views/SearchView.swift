@@ -10,9 +10,7 @@ import SwiftUI
 struct SearchView: View {
     @State private var searchText = ""
     @StateObject var viewModel = SearchViewViewModel()
-    @StateObject var favoritesViewModel = FavoritesViewViewModel()
 
-    
     var body: some View {
         
         NavigationView{
@@ -20,7 +18,15 @@ struct SearchView: View {
                 ScrollView{
                     if let meals = viewModel.searchResults?.meals {
                         ForEach(meals, id: \.self) { meal in
-                            MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb, viewModel: favoritesViewModel)
+                            NavigationLink(destination: DetailView(mealID: meal.idMeal, mealName: meal.strMeal, mealThumb: meal.strMealThumb)) {
+                                MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
+                                    .overlay(alignment: .topTrailing){
+                                        Image(systemName: viewModel.isFavorite(id: meal.idMeal) ? "heart.fill" : "heart")
+                                            .onTapGesture {
+                                                viewModel.toggleFavorite(id: meal.idMeal, name: meal.strMeal, thumb: meal.strMealThumb)
+                                            }
+                                    }
+                            }
                         }
                     }
                 }

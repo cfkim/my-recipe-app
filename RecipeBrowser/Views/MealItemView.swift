@@ -11,9 +11,8 @@ struct MealItemView: View {
     let id : String
     let name: String
     let thumbnail : String
-    
-    @ObservedObject var viewModel: FavoritesViewViewModel
-    
+    @StateObject var viewModel = MealItemViewViewModel()
+
     var body: some View {
         VStack(alignment: .leading){
             AsyncImage(url: URL(string: thumbnail)) { image in
@@ -33,15 +32,6 @@ struct MealItemView: View {
             .overlay(alignment: .bottomLeading) {
                 Caption(text: name)
             }
-            .overlay(alignment: .topTrailing){
-                Heart(isFavorite: viewModel.isFavorite(id: id))
-                    .offset(x: 10, y: -10)
-                    .onTapGesture {
-                        viewModel.toggleFavorite(id: id, name: name, thumb: thumbnail)
-                        print("\(viewModel.favorites.map { $0.strMeal })")
-                    }
-            }
-            
         }
         .padding()
     }
@@ -76,6 +66,6 @@ struct Heart: View {
 }
 
 #Preview {
-    MealItemView(id: "52897", name: "Carrot Cake", thumbnail: "https://www.themealdb.com/images/media/meals/vrspxv1511722107.jpg", viewModel: FavoritesViewViewModel())
+    MealItemView(id: "52897", name: "Carrot Cake", thumbnail: "https://www.themealdb.com/images/media/meals/vrspxv1511722107.jpg")
 }
 

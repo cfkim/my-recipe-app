@@ -10,38 +10,44 @@ import SwiftUI
 struct ListView: View {
     @State var selection : Category = .Dessert
     @StateObject var viewModel = ListViewViewModel()
-    @StateObject var favoritesViewModel = FavoritesViewViewModel()
-
+    
     var body: some View {
-
-        VStack{
-            Picker("Category", selection: $selection) {
-                ForEach(Category.allCases, id: \.self) { category in
-                    Text(category.displayName)
-                }
-            }
-            .onChange(of: selection) {
-                Task{
-                    do {
-                        try await viewModel.getMealsByCategory(category: selection.rawValue)
-                    }catch RecipeError.invalidURL{
-                        print("invalid URL")
-                    }catch RecipeError.invalidResponse{
-                        print("invalid response")
-                    }catch RecipeError.invalidData{
-                        print("invalid data")
-                    }catch{
-                        print("unexpected error")
+        NavigationView{
+            VStack{
+                Picker("Category", selection: $selection) {
+                    ForEach(Category.allCases, id: \.self) { category in
+                        Text(category.displayName)
                     }
                 }
-            }
-            
-            NavigationView{
+                .onChange(of: selection) {
+                    Task{
+                        do {
+                            try await viewModel.getMealsByCategory(category: selection.rawValue)
+                        }catch RecipeError.invalidURL{
+                            print("invalid URL")
+                        }catch RecipeError.invalidResponse{
+                            print("invalid response")
+                        }catch RecipeError.invalidData{
+                            print("invalid data")
+                        }catch{
+                            print("unexpected error")
+                        }
+                    }
+                }
                 ScrollView{
                     VStack{
                         if let meals = viewModel.listOfMeals?.meals{
                             ForEach(meals, id: \.self) { meal in
-                                MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb, viewModel: favoritesViewModel)
+                                NavigationLink(destination: DetailView(mealID: meal.idMeal, mealName: meal.strMeal, mealThumb: meal.strMealThumb)) {
+                                    MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
+                                        .overlay(alignment: .topTrailing){
+                                            Button(action: {
+                                                viewModel.toggleFavorite(id: meal.idMeal, name: meal.strMeal, thumb: meal.strMealThumb)
+                                            }) {
+                                                Image(systemName: viewModel.favorites.contains(where: { $0.idMeal == meal.idMeal }) ? "heart.fill" : "heart")
+                                            }
+                                        }
+                                }
                             }
                         }else{
                             Text("loading...")
@@ -52,20 +58,19 @@ struct ListView: View {
                     }
                 }
             }
-
-        }
-        .onAppear{
-            Task{
-                do {
-                    try await viewModel.getMealsByCategory(category: "Dessert")
-                }catch RecipeError.invalidURL{
-                    print("invalid URL")
-                }catch RecipeError.invalidResponse{
-                    print("invalid response")
-                }catch RecipeError.invalidData{
-                    print("invalid data")
-                }catch{
-                    print("unexpected error")
+            .onAppear{
+                Task{
+                    do {
+                        try await viewModel.getMealsByCategory(category: "Dessert")
+                    }catch RecipeError.invalidURL{
+                        print("invalid URL")
+                    }catch RecipeError.invalidResponse{
+                        print("invalid response")
+                    }catch RecipeError.invalidData{
+                        print("invalid data")
+                    }catch{
+                        print("unexpected error")
+                    }
                 }
             }
         }

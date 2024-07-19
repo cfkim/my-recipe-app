@@ -44,7 +44,9 @@ class FavoritesViewViewModel : ObservableObject {
         } else {
             favorites.append(favoriteMeal)
         }
+        print("toggle favorite in favorite view.")
         saveFavoriteMeals()
+        print(favorites)
     }
     
     // this updates the app storage

@@ -7,3 +7,7 @@
 
 // object for an array of meal objects with just 'basic' info.
 import Foundation
+
+struct MealDetailsResponse : Codable, Hashable {
+    let meals : [MealDetails]
+}
