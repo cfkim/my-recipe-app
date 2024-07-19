@@ -18,25 +18,28 @@ struct FavoritesView: View {
             ScrollView{
                 if !favorites.isEmpty{
                     ForEach(favorites, id: \.self) { meal in
-                        MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
-                            .overlay(alignment: .topTrailing){
-                                Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "heart")
-                                    .onTapGesture {
-                                        toggleFavorite(id: meal.idMeal, name: meal.strMeal, thumb: meal.strMealThumb)
-                                    }
-                            }
+                        NavigationLink(destination: DetailView(mealID: meal.idMeal, mealName: meal.strMeal, mealThumb: meal.strMealThumb)) {
+                            MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
+                                .overlay(alignment: .topTrailing){
+                                    Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(.white)
+                                        .offset(x: -40, y: 40)
+                                }
+                        }
                     }
                 }else{
                     Text("No favorites.")
                         .offset(y: 250)
                         .foregroundColor(.gray)
                 }
-                
+            }
+            .onAppear{
+                loadFavorites()
             }
         }
-        .onAppear{
-            loadFavorites() 
-        }
+        
     }
     
     // this retrieves the favorites
@@ -66,6 +69,7 @@ struct FavoritesView: View {
         } else {
             favorites.append(favoriteMeal)
         }
+        
         saveFavoriteMeals()
         print(favorites)
     }

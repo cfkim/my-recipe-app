@@ -43,11 +43,11 @@ struct ListView: View {
                                 NavigationLink(destination: DetailView(mealID: meal.idMeal, mealName: meal.strMeal, mealThumb: meal.strMealThumb)) {
                                     MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
                                         .overlay(alignment: .topTrailing){
-                                            Button(action: {
-                                                toggleFavorite(id: meal.idMeal, name: meal.strMeal, thumb: meal.strMealThumb)
-                                            }) {
-                                                Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "heart")
-                                            }
+                                            Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "")
+                                                .resizable()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundColor(.white)
+                                                .offset(x: -40, y: 40)
                                         }
                                 }
                             }

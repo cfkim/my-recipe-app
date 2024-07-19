@@ -16,49 +16,53 @@ struct SearchView: View {
     var body: some View {
         
         NavigationView{
-            if !searchText.isEmpty{
-                ScrollView{
+            ScrollView{
+                if !searchText.isEmpty{
                     if let meals = viewModel.searchResults?.meals {
                         ForEach(meals, id: \.self) { meal in
                             NavigationLink(destination: DetailView(mealID: meal.idMeal, mealName: meal.strMeal, mealThumb: meal.strMealThumb)) {
                                 MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
                                     .overlay(alignment: .topTrailing){
-                                        Button(action: {
-                                            toggleFavorite(id: meal.idMeal, name: meal.strMeal, thumb: meal.strMealThumb)
-                                        }) {
-                                            Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "heart")
-                                        }
+                                        Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "")
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(.white)
+                                            .offset(x: -40, y: 40)
                                     }
                             }
                         }
                     }
-                }
-            }else{
-                VStack{
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                    Text("results")
-                        .foregroundColor(.gray)
+                }else{
+                    VStack{
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        Text("results")
+                            .foregroundColor(.gray)
+                    }
+                    .offset(y: 150)
                 }
             }
-        }
-        .searchable(text: $searchText, prompt: "Search meal by name")
-        .onChange(of: searchText) {
-            Task{
-                do{
-                    try await viewModel.getSearchResults(searchText: searchText)
-                }catch RecipeError.invalidURL{
-                    print("invalid URL")
-                }catch RecipeError.invalidData{
-                    print("invalid data")
-                }catch RecipeError.invalidResponse{
-                    print("invalid response")
-                }catch{
-                    print("unexpected error")
+            .searchable(text: $searchText, prompt: "Search meal by name")
+            .onChange(of: searchText) {
+                Task{
+                    do{
+                        try await viewModel.getSearchResults(searchText: searchText)
+                    }catch RecipeError.invalidURL{
+                        print("invalid URL")
+                    }catch RecipeError.invalidData{
+                        print("invalid data")
+                    }catch RecipeError.invalidResponse{
+                        print("invalid response")
+                    }catch{
+                        print("unexpected error")
+                    }
                 }
+            }
+            .onAppear{
                 loadFavorites()
             }
         }
+        
     }
     
     // this retrieves the favorites

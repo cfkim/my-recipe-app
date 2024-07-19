@@ -16,7 +16,8 @@ struct DetailView: View {
     let mealThumb: String
     @StateObject var viewModel = DetailViewViewModel()
     @State var selectedView : Views = .ingredients
-    
+    @State var favorites : [Meal] = []
+    @AppStorage("favorites") private var favoritesJSON = "[]"
     var body: some View {
         
         VStack{
@@ -33,6 +34,12 @@ struct DetailView: View {
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.secondary)
             }
+            Button(action: {
+                toggleFavorite(id: mealID, name: mealName, thumb: mealThumb)
+            }) {
+                Image(systemName: isFavorite(id: mealID) ? "heart.fill" : "heart")
+            }
+            
             .padding()
             Picker("Views", selection: $selectedView) {
                     ForEach(Views.allCases, id: \.self) { view in
@@ -78,8 +85,49 @@ struct DetailView: View {
                 }catch RecipeError.invalidData{
                     print("invalid data")
                 }
+                
+                loadFavorites()
             }
         } 
+    }
+    
+    // this retrieves the favorites
+    func loadFavorites() {
+        if let data = favoritesJSON.data(using: .utf8) {
+            let decoder = JSONDecoder()
+            if let decodedFavorites = try? decoder.decode([Meal].self, from:data) {
+                favorites = decodedFavorites
+            }
+        }
+    }
+    
+    // this says whether the meal is favorited or not
+    func isFavorite(id: String) -> Bool {
+        // see if the id exists favorites list
+        return favorites.contains { (favorite: Meal) in
+            favorite.idMeal == id
+        }
+    }
+    
+    // this toggles whether a meal is favorited or not
+    func toggleFavorite(id: String, name: String, thumb: String) {
+        let favoriteMeal = Meal(idMeal: id, strMeal: name, strMealThumb: thumb)
+        
+        if let index = favorites.firstIndex(of: favoriteMeal) {
+            favorites.remove(at: index)
+        } else {
+            favorites.append(favoriteMeal)
+        }
+        saveFavoriteMeals()
+        print(favorites)
+    }
+    
+    // this updates the app storage
+    func saveFavoriteMeals() {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(favorites) {
+            favoritesJSON = String(data: encoded, encoding: .utf8) ?? "[]"
+        }
     }
 }
 
