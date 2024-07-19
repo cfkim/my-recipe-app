@@ -63,7 +63,7 @@ struct ListView: View {
             .onAppear{
                 Task{
                     do {
-                        try await viewModel.getMealsByCategory(category: "Dessert")
+                        try await viewModel.getMealsByCategory(category: selection.rawValue)
                     }catch RecipeError.invalidURL{
                         print("invalid URL")
                     }catch RecipeError.invalidResponse{
