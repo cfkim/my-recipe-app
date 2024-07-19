@@ -1,11 +1,15 @@
 # Recipe Browser
-This app allows users to browse recipes based on category. It also allows them to search for a specific recipe. Additionally, it keeps track of their favorited ones.
+This app allows users to browse a wide selection of recipes and favorite them for later viewing.
+## Features
+- Be able to browse recipes by category
+- View recipe details
+- Clear images of recipes
 
 ## Built with
-This app was built with Swift.
+This app was built in Swift.
 
 ## Getting Started
-Here's how to set up this project locally.
+(You need to have XCode on your device). 
 
 ### Installation
 
