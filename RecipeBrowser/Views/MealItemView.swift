@@ -11,8 +11,6 @@ struct MealItemView: View {
     let id : String
     let name: String
     let thumbnail : String
-    
-    @StateObject var viewModel = MealItemViewViewModel()
 
     var body: some View {
         VStack(alignment: .leading){
@@ -29,7 +27,7 @@ struct MealItemView: View {
 
             }
             .frame(width: 300, height: 300)
-            .cornerRadius(30)
+            .cornerRadius(10)
             .overlay(alignment: .bottomLeading) {
                 Caption(text: name)
             }
@@ -41,12 +39,19 @@ struct MealItemView: View {
 struct Caption: View {
     let text: String
     var body: some View {
-        Text(text)
-            .padding()
-            .foregroundColor(.white)
-            .bold()
-            .font(.title)
-            .padding()
+        
+        LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.8), Color.clear]), startPoint: .bottom, endPoint: .top)
+                    .frame(height: 100)
+                    .edgesIgnoringSafeArea(.all)
+                    .cornerRadius(10)
+                    .overlay (alignment: .bottomLeading){
+                        Text(text)
+                            .padding()
+                            .foregroundColor(.white)
+                            .bold()
+                            .font(.title3)
+                            .padding()
+                    }
     }
 }
 

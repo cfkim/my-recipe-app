@@ -44,9 +44,7 @@ struct ListView: View {
                                     MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
                                         .overlay(alignment: .topTrailing){
                                             Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "")
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.pink)
                                                 .offset(x: -40, y: 40)
                                         }
                                 }
@@ -54,7 +52,7 @@ struct ListView: View {
                         }else{
                             Text("loading...")
                                 .offset(y: 250)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.gray)
                         }
                         
                     }
@@ -77,6 +75,7 @@ struct ListView: View {
                 loadFavorites()
             }
         }
+        
     }
     
     // this retrieves the favorites

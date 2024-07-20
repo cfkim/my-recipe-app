@@ -11,12 +11,27 @@ struct DirectionsView: View {
     let directions : String
     var body: some View {
         ScrollView{
-            Text(directions)
+            if directions != "none"{
+                Text(directions)
+            }else{
+                Spacer()
+                
+                HStack{
+                    Text("Cannot find instructions")
+                        .foregroundColor(.gray)
+                    
+                    Image(systemName: "questionmark.circle")
+                        .foregroundColor(.gray)
+                }
+
+                Spacer()
+            }
+            
         }
         .padding()
     }
 }
 
 #Preview {
-    DirectionsView(directions: "stir")
+    DirectionsView(directions: "none")
 }

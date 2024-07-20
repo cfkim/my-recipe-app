@@ -24,9 +24,7 @@ struct SearchView: View {
                                 MealItemView(id: meal.idMeal, name: meal.strMeal, thumbnail: meal.strMealThumb)
                                     .overlay(alignment: .topTrailing){
                                         Image(systemName: isFavorite(id: meal.idMeal) ? "heart.fill" : "")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.pink)
                                             .offset(x: -40, y: 40)
                                     }
                             }

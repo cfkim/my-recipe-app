@@ -58,9 +58,9 @@ struct MealDetails : Codable, Hashable {
     let strMeasure20: String
     
     // adds bullet points to the instructions
-    var bulletedString : String {
+    var cleanDirections : String {
         let text = strInstructions.components(separatedBy: "\r\n")
-        let bulletedString = text.map { "• \($0) \n" }
+        let bulletedString = text.map { "\($0) \n" }
         return bulletedString.joined(separator: "\n")
     }
 

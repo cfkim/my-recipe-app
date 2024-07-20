@@ -9,9 +9,5 @@ import Foundation
 import SwiftUI
 
 class FavoritesViewViewModel : ObservableObject {
-
     init() {}
-    
-    
-    
 }

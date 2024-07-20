@@ -21,24 +21,33 @@ struct DetailView: View {
     var body: some View {
         
         VStack{
-            Text(mealName)
-                .font(.title)
+            HStack{
+                Text(mealName)
+                    .font(.title)
+                Spacer()
+                Button(action: {
+                    toggleFavorite(id: mealID, name: mealName, thumb: mealThumb)
+                }) {
+                    Image(systemName: isFavorite(id: mealID) ? "heart.fill" : "heart")
+                        .foregroundColor(.pink)
+                }
+                
+            }
+            
             AsyncImage(url: URL(string: mealThumb)) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+                    .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                     
             } placeholder: {
                 Image(systemName: "fork.knife")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.secondary)
+                    .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
             }
-            Button(action: {
-                toggleFavorite(id: mealID, name: mealName, thumb: mealThumb)
-            }) {
-                Image(systemName: isFavorite(id: mealID) ? "heart.fill" : "heart")
-            }
+            
             
             .padding()
             Picker("Views", selection: $selectedView) {
@@ -51,17 +60,28 @@ struct DetailView: View {
             if(selectedView == .ingredients){
                 List{
                     ForEach(viewModel.meal?.ingredients ?? [["none", "none"]], id: \.self) { ingredient in
-                        HStack{
-                            Text(ingredient[0])
-                            Spacer()
-                            Text(ingredient[1])
+                        if ingredient[0] == "none" && ingredient[1] == "none"{
+                            HStack{
+                                Text("Cannot find ingredients")
+                                    .foregroundColor(.gray)
+                                Image(systemName: "questionmark.circle")
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            
+                        }else{
+                            HStack{
+                                Text(ingredient[0])
+                                Spacer()
+                                Text(ingredient[1])
+                            }
                         }
                     }
                 }
                 .listStyle(.plain)
                 
             }else{
-                DirectionsView(directions: viewModel.meal?.bulletedString ?? "none")
+                DirectionsView(directions: viewModel.meal?.cleanDirections ?? "none")
             }
             
             /*
